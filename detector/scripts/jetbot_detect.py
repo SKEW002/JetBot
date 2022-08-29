@@ -37,6 +37,8 @@ class Detection:
         self.cmd_vel_msg = Twist()
         self.goal_msg = PoseStamped()
         self.pwm_msg = String()
+        self.pwm_left = 0
+        self.pwm_right = 0
 
         self.start_image = False
 
@@ -84,6 +86,8 @@ class Detection:
         results = self.model(self.bgr_image, size=320)  # includes NMS
         outputs = results.xyxy[0].cpu()
         if len(outputs) > 0:
+            self.pwm_left = 0.3
+            self.pwm_right = 0.3
             for i,detection in enumerate(outputs):
                 self.x0 = int(outputs[i][0]) #xmin
                 self.y0 = int(outputs[i][1]) #ymin
@@ -101,34 +105,25 @@ class Detection:
                     cv2.rectangle(self.bgr_image,(self.x0, self.y0),(self.x1,self.y1),(0,255,0),3)
 
 
-            if self.center[1] > (self.image_height / 2 + tol):
-                self.cmd_vel_msg.linear.z = -0.4
+            if self.center[0] > (self.image_width / 2 + tol):
+                self.pwm_left += 0.1
+                self.pwm_right -= 0.1
 
-            elif self.center[1] < (self.image_height / 2  - tol) and self.center[1]>0:
-                self.cmd_vel_msg.linear.z = 0.4
+            elif self.center[0] < (self.image_width / 2  - tol):
+                self.pwm_left -= 0.1
+                self.pwm_right += 0.1
 
             else:
-                self.cmd_vel_msg.linear.z = 0
+                self.pwm_left = 0.3
+                self.pwm_right = 0.3
 
-
+        self.pwm_msg.data = str(self.pwm_left) + " " + str(self.pwm_right)
+        self.pub_pwm.publish(self.pwm_msg)
 
         cv2.imshow("frame",self.bgr_image) 
         if cv2.waitKey(1) == ord('q'):  # q to quit
             cv2.destroyAllWindows()
             raise StopIteration  
-
-        '''
-        uint8 PENDING=0
-        uint8 ACTIVE=1
-        uint8 PREEMPTED=2
-        uint8 SUCCEEDED=3
-        uint8 ABORTED=4
-        uint8 REJECTED=5
-        uint8 PREEMPTING=6
-        uint8 RECALLING=7
-        uint8 RECALLED=8
-        uint8 LOST=9
-        '''
 
             
     def trigger_publish(self, request):
