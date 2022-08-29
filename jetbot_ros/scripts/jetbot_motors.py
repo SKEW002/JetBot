@@ -58,6 +58,9 @@ def on_cmd_dir(msg):
 # raw L/R motor commands (speed, speed)
 def on_cmd_raw(msg):
 	rospy.loginfo(rospy.get_caller_id() + ' cmd_raw=%s', msg.data)
+	speed = msg.data.split()
+	set_speed(motor_left_ID,  -float(speed[0]))
+	set_speed(motor_right_ID,  -float(speed[1])) 
 
 # simple string commands (left/right/forward/backward/stop)
 def on_cmd_str(msg):
