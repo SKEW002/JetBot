@@ -90,6 +90,7 @@ class Jetbot_Control:
 			speed[1] += 0.05/angular_z * abs(angular_z) + angular_z
 
 
+
 		self.set_speed(self.motor_left_ID,  -float(speed[0]))
 		self.set_speed(self.motor_right_ID,  -float(speed[1])) 
 
