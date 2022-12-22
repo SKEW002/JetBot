@@ -76,8 +76,8 @@ class Jetbot_Control:
 		speed = [0,0]
 
 		if abs(linear_x) > 0:
-			speed[0] = 0.2/linear_x * abs(linear_x) + linear_x
-			speed[1] = 0.2/linear_x * abs(linear_x) + linear_x
+			speed[0] = 0.18/linear_x * abs(linear_x) + linear_x
+			speed[1] = 0.18/linear_x * abs(linear_x) + linear_x
 
 			#speed[0] = linear_x
 			#speed[1] = linear_x
