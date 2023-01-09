@@ -10,7 +10,6 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   std_msgs
   detection_msgs
-  garbage_quick_sort_robot_msg
 )
 
 catkin_python_setup()
@@ -21,7 +20,6 @@ catkin_package(
   sensor_msgs 
   std_msgs 
   detection_msgs
-  garbage_quick_sort_robot_msg 
 )
 
 catkin_install_python(
