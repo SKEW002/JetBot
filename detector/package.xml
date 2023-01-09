@@ -14,7 +14,6 @@
   <depend>sensor_msgs</depend>
   <depend>std_msgs</depend>
   <depend>detection_msgs</depend>
-  <depend>garbage_quick_sort_robot_msg</depend>
   <depend>python-numpy</depend>
   <depend>python3-yolov5</depend>
   <depend>python3-opencv</depend>
