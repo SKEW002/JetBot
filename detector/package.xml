@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>detector</name>
+  <version>0.0.0</version>
+  <description>The detector package</description>
+  <author>Shen Yu</author>
+  <maintainer email="skew002@todo.todo">skew002</maintainer>
+  <license>BSD</license>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>sensor_msgs</depend>
+  <depend>std_msgs</depend>
+  <depend>detection_msgs</depend>
+  <depend>garbage_quick_sort_robot_msg</depend>
+  <depend>python-numpy</depend>
+  <depend>python3-yolov5</depend>
+  <depend>python3-opencv</depend>
+  <depend>python-pytorch-pip</depend>
+  <export>
+    <architecture_independent />
+  </export>
+</package>
