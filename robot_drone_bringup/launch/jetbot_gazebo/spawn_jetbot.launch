@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+
+<launch>
+
+    <!-- Arguments for robot and world -->
+    <arg name="robot_namespace" default="robot"/>
+<!--     <arg name="world_name" default="$(find robot_drone_bringup)/worlds/turtlebot3_house.world" />
+ -->    <!--arg name="world_name" default="$(find robot_drone_bringup)/worlds/two_level_house.world" /-->
+
+    <!-- Initial Location of the robot -->
+    <arg name="x" default="-4.0"/>
+    <arg name="y" default="7.0"/>
+    <arg name="z" default="0.3"/>
+    <arg name="yaw" default="-1.57"/>   
+    <!-- Arguments for intel realsense -->
+    <arg name="pointcloud_enable" default="false" />
+    <arg name="realsense_enable" default="false" />
+    <!-- Arguments for RPLidar -->
+    <arg name="lidar_enable" default="true" />
+    <arg name="visualize_laser" default="false" /> 
+    <!-- Arguments for IMU -->
+    <arg name="imu_enable" default="true" />
+    <!-- Arguments for GPS -->
+    <arg name="gps_enable" default="false" />
+    <!-- Arguments for sonars -->
+    <arg name="ultrasonic_enable" default="false" />
+    <!-- these are the arguments you can pass this launch file, for example paused:=true -->
+    <arg name="paused" default="false"/>
+    <arg name="use_sim_time" default="true"/>
+    <arg name="gui" default="true"/>
+    <arg name="headless" default="false"/>
+    <arg name="debug" default="false"/>
+
+    <arg name="move_base_flex" default='0' doc="move_base type [0, default = move_base; 1 = move_base_flex]"/>
+    <!-- Map, visualization config and other args -->
+    <arg name="open_rviz" default="true"/>
+    <arg name="move_forward_only" default="false"/>
+    <arg name="rvizconfig" default="$(find robot_drone_bringup)/rviz/jetbot_navigation_move_base_gazebo.rviz"/>   
+
+    <!-- Position of the robot -->
+    <arg name="local_planner" default="teb" />
+
+    <!-- Get the robot description -->
+    <include file="$(find jetbot_description)/launch/description.launch">
+      <arg name="pointcloud_enable" value="$(arg pointcloud_enable)" />
+      <arg name="realsense_enable" value="$(arg realsense_enable)" />
+      <arg name="lidar_enable" value="$(arg lidar_enable)"/>
+      <arg name="visualize_laser" value="$(arg visualize_laser)"/>
+      <arg name="imu_enable" value="$(arg imu_enable)"/>
+      <arg name="ultrasonic_enable" value="$(arg ultrasonic_enable)"/>    
+    </include>
+<!--     <node pkg="tf" type="static_transform_publisher" name="map_to_odom" args="0 0 0 0 0 0 map odom 40" />
+ -->
+    <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+<!--     <include file="$(find gazebo_ros)/launch/empty_world.launch">
+      <arg name="debug" value="$(arg debug)" />
+      <arg name="gui" value="$(arg gui)" />
+      <arg name="paused" value="$(arg paused)"/>
+      <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+      <arg name="headless" value="$(arg headless)"/>
+      <arg name="world_name" value="$(arg world_name)" />    
+    </include> -->
+  
+    <!-- This will be usefull if you want to use this launch file stand alone to prevent -->
+    <!-- the pid error message when loading                                              -->
+    <rosparam command="load" file="$(find jetbot_control)/config/pid.yaml" ns="/" />
+
+    <!-- push robot_description to factory and spawn robot in gazebo -->
+    <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model"
+          args="-x $(arg x)
+                -y $(arg y)
+                -z $(arg z)
+                -Y $(arg yaw)
+                -unpause
+                -urdf
+                -param robot_description
+                -model $(arg robot_namespace)" 
+          respawn="false"
+          output="screen" />
+
+    <!-- AMCL -->
+    <include file="$(find robot_drone_bringup)/launch/jetbot_gazebo/amcl.launch"/>
+
+    <!-- move_base -->
+    <include file="$(find robot_drone_bringup)/launch/jetbot_gazebo/move_base.launch">
+    </include>
+
+    <!-- gazebo controller manager -->
+    <include file="$(find jetbot_control)/launch/jetbot_controller_manager.launch" />
+
+    <!-- rviz -->
+    <include file="$(find jetbot_viz)/launch/view_model.launch" >
+      <arg name="pointcloud_enable" value="$(arg pointcloud_enable)"/>
+      <arg name="realsense_enable" value="$(arg realsense_enable)"/>
+      <arg name="lidar_enable" value="$(arg lidar_enable)"/>
+      <arg name="visualize_laser" value="$(arg visualize_laser)"/>
+      <arg name="imu_enable" value="$(arg imu_enable)"/>
+      <arg name="gps_enable" value="$(arg gps_enable)"/>
+      <arg name="ultrasonic_enable" value="$(arg ultrasonic_enable)"/>
+      <arg name="rvizconfig" value="$(arg rvizconfig)"/> 
+    </include>
+
+    <!-- Arguments -->
+    <arg name="map_file" default="$(find jetbot_navigation)/maps/blank_map.yaml"/>
+    <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
+<!--       <param name="frame_id" value="map"/>
+ -->
+
+
+
+<!--     <include file="$(find detector)/launch/jetbot_detect.launch"/>
+ -->    <!-- Map server -->
+<!--     <arg name="map_file" default="$(find jetbot_navigation)/maps/blank_map.yaml"/>  
+    <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+ -->
+</launch>

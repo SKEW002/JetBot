@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+
+<launch>
+   <arg name="model" default="$(find hector_quadrotor_description)/urdf/quadrotor.gazebo.xacro" />
+
+   <include file="$(find hector_quadrotor_gazebo)/launch/spawn_quadrotor.launch">
+     <arg name="y" value="-1.0" />
+   </include>
+
+
+
+   <!--group ns="jetbot">
+     <include file="$(find jetbot_gazebo)/launch/spawn_jetbot_drone.launch">
+       <arg name="x" value="0.0" />
+       <arg name="y" value="1.0" />
+       <arg name="z" value="0.0" />
+     </include>
+   </group-->
+
+</launch>
+
