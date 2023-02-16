@@ -25,7 +25,7 @@ from yolov5.utils.general import (
     check_img_size,
     check_requirements,
     non_max_suppression,
-    scale_coords
+    scale_boxes
 )
 from yolov5.utils.plots import Annotator, colors
 from yolov5.utils.torch_utils import select_device
@@ -221,7 +221,7 @@ class Detection:
 
             if len(det): # found target
                 # Rescale boxes from img_size to im0 size
-                det[:, :4] = scale_coords(im.shape[2:], det[:, :4], im0.shape).round()
+                det[:, :4] = scale_boxes(im.shape[2:], det[:, :4], im0.shape).round()
 
                 # Write results
                 for *xyxy, conf, cls in reversed(det):
@@ -263,6 +263,7 @@ class Detection:
             else:
                 self.goal_status = 1 # not found/in progress
 
+            self.bounding_boxes_pub.publish(BoundingBoxes())
             self.detection_image_pub.publish(self.br.cv2_to_imgmsg(self.bgr_image, "bgr8"))
             # cv2.imshow(str(0), self.bgr_image)
             # cv2.waitKey(1)

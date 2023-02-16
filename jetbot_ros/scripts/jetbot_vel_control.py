@@ -86,8 +86,8 @@ class Jetbot_Control:
 			#speed[0] -= 0.3/angular_z * abs(angular_z)
 			#speed[1] += 0.3/angular_z * abs(angular_z)
 
-			speed[0] -= 0.05/angular_z * abs(angular_z) + angular_z
-			speed[1] += 0.05/angular_z * abs(angular_z) + angular_z
+			speed[0] -= 0.025/angular_z * abs(angular_z) + angular_z
+			speed[1] += 0.025/angular_z * abs(angular_z) + angular_z
 
 
 
@@ -114,6 +114,26 @@ class Jetbot_Control:
 			self.all_stop()
 		else:
 			rospy.logerror(rospy.get_caller_id() + ' invalid cmd_str=%s', msg.data)
+
+	def xie_ming_algorithm(self, msg):
+		L = 0.12
+		wheel_radius = 0.063
+
+		vl = 0.5*(2 * msg.linear.x + L * msg.angular.z)
+		vr = 0.5*(2 * msg.linear.x - L * msg.angular.z)
+
+		wl = vl / wheel_radius
+		wr = vr / wheel_radius
+
+		speed_per_rads = 0.5 / 8.97553021 #speed/rads
+
+		speed = [0,0]
+		speed[0] = speed_per_rads * wl
+		speed[1] = speed_per_rads * wr
+
+		print(speed)
+		self.set_speed(self.motor_left_ID,  -float(speed[0]))
+		self.set_speed(self.motor_right_ID,  -float(speed[1]))
 
 
 # initialization

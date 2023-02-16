@@ -5,8 +5,8 @@
   <arg name="rvizconfig" default="$(find robot_drone_bringup)/rviz/jetbot_navigation_move_base.rviz"/>   
 
     <!-- ZEDm Camera -->
-<!--     <include file="$(find robot_drone_bringup)/launch/jetbot_real/zedm.launch">
-    </include> -->
+    <include file="$(find zed_wrapper)/launch/zedm.launch">
+    </include>
     
 
     <include file="$(find robot_drone_bringup)/launch/jetbot_real/pcl_to_laserscan_zedm.launch">
@@ -15,12 +15,11 @@
     <include file="$(find robot_drone_bringup)/launch/jetbot_real/move_base.launch">
     </include>
 
-    <include file="$(find detector)/launch/jetbot_real_detect.launch">
-    </include>
+    <!--include file="$(find detector)/launch/jetbot_real_detect.launch">
+    </include-->
 
     <!-- rviz -->
-    <include file="$(find jetbot_viz)/launch/view_model.launch" >
-        <arg name="rvizconfig" value="$(arg rvizconfig)"/> 
-    </include>
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" output="screen" /-->
+  <node name="jetbot_vel_control" pkg="jetbot_ros" type="jetbot_vel_control.py" args="-d $(find jetbot_ros)/scripts/jetbot_vel_control.py" required="true" output="screen" />
 
 </launch>

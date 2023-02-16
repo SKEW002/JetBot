@@ -52,8 +52,8 @@ TebLocalPlannerROS:
 # legacy_obstacle_association: True
  # Optimization
     
- no_inner_iterations: 5
- no_outer_iterations: 4
+ no_inner_iterations: 2
+ no_outer_iterations: 1
  optimization_activate: True
  optimization_verbose: False
  penalty_epsilon: 0.1
@@ -71,8 +71,8 @@ TebLocalPlannerROS:
 
  # Homotopy Class Planner
 
- enable_homotopy_class_planning: True
- enable_multithreading: True
+ enable_homotopy_class_planning: False
+ enable_multithreading: False
  simple_exploration: False
  max_number_classes: 4
  roadmap_graph_no_samples: 15
