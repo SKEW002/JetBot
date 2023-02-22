@@ -4,7 +4,6 @@ import time
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 from std_msgs.msg import String, Float32
-from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 
 
@@ -12,57 +11,23 @@ from geometry_msgs.msg import Twist
 class Jetbot_Control:
 	def __init__(self):
 		rospy.Subscriber('/jetbot_velocity_controller/cmd_vel', Twist, self.on_cmd_raw)
-		rospy.Subscriber('/zedm/zed_node/odom', Odometry, self.odomCallback)
+		rospy.Subscriber('/jetbot_velocity_feedback', Float32, self.velocity_callback)
 		rospy.Subscriber('/cmd_str', String, self.on_cmd_str)
 		
-		self.odom_msg = Float32()
-		self.start_odom = False
-		self.odom_pub = rospy.Publisher('/cmd_out/odom', Float32 , queue_size=10)
-		self.pose_x = 0
-		self.pose_y = 0
-		self.start_timer = time.time()
-
 		self.motor_driver = Adafruit_MotorHAT(i2c_bus=1)
 
 		self.motor_left_ID = 1
 		self.motor_right_ID = 2
-
+		self.veocity = 0
 		self.motor_left = self.motor_driver.getMotor(self.motor_left_ID)
 		self.motor_right = self.motor_driver.getMotor(self.motor_right_ID)
 
 		self.all_stop()
 
 		
-	def odomCallback(self, odom):
-		self.pose_x = odom.pose.pose.position.x
-		self.pose_y = odom.pose.pose.position.y
-		self.start_odom = True
-
-	
-	def linear_vel(self):
-		prev_x = self.pose_x
-		prev_y = self.pose_y
-
-		timer = time.time()
-		velocity = 0
-		#rate = rospy.Rate(15)
-
-		if self.start_odom:
-			if(self.start_timer - timer) > 0.0666:
-				self.start_timer = time.time()
-				distance_travelled = (sqrt(pow((self.pose_x - prev_x),2) + pow((self.pose_y - prev_y),2)))*100
-				velocity = distance_travelled/(abs(self.start_timer - timer))
-				if velocity < 2:
-					velocity =  0.0
-
-				prev_x = self.pose_x
-				prev_y = self.pose_y
-				timer = time.time()
-
-			else:
-				start = time.time()
-
-			print(velocity)
+	def velocity_callback(self, msg):
+		self.veocity = msg.data
+		print(self.velocity)
 		
 
 
