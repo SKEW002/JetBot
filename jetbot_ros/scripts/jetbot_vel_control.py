@@ -38,13 +38,13 @@ class Jetbot_Control:
 		self.start_odom = True
 
 	
-    def linear_vel(self):
-        prev_x = self.pose_x
-        prev_y = self.pose_y
+	def linear_vel(self):
+		prev_x = self.pose_x
+		prev_y = self.pose_y
 
-        start = time.time()
-        timer = time.time()
-        #rate = rospy.Rate(15)
+		start = time.time()
+		timer = time.time()
+		#rate = rospy.Rate(15)
 
 		if self.start_odom:
 			if(start - timer) > 0.0666:
