@@ -109,7 +109,7 @@ class Jetbot_Control:
 
 		self.set_speed(self.motor_left_ID,  -float(speed[0]))
 		self.set_speed(self.motor_right_ID,  -float(speed[1]))
-		self.linear_vel()
+		
 
 	# simple string commands (left/right/forward/backward/stop)
 	def on_cmd_str(self, msg):

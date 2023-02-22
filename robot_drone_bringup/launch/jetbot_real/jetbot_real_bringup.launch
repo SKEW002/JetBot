@@ -22,4 +22,6 @@
   <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" output="screen" /-->
   <node name="jetbot_vel_control" pkg="jetbot_ros" type="jetbot_vel_control.py" args="-d $(find jetbot_ros)/scripts/jetbot_vel_control.py" required="true" output="screen" />
 
+  <node name="linear_vel" pkg="jetbot_ros" type="linear_vel.py" args="-d $(find jetbot_ros)/scripts/linear_vel.py" required="true" output="screen" />
+
 </launch>
