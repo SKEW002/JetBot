@@ -8,11 +8,11 @@ from std_msgs.msg import Float32
 class LinearVel:
 
     def __init__(self):
-        rospy.Subscriber('/zed2/zed_node/odom',Odometry,self.odomCallback)
+        rospy.Subscriber('/zedm/zed_node/odom',Odometry,self.odomCallback)
 
         self.odom_msg = Float32()
         self.start_odom = False
-        self.odom_pub = rospy.Publisher('/cmd_out/odom', Float32 , queue_size=10)
+        self.odom_pub = rospy.Publisher('/jetbot_velocity_feedback', Float32 , queue_size=10)
         self.pose_x = 0
         self.pose_y = 0
 
