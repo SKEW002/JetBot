@@ -20,6 +20,7 @@ class Jetbot_Control:
 		self.odom_pub = rospy.Publisher('/cmd_out/odom', Float32 , queue_size=10)
 		self.pose_x = 0
 		self.pose_y = 0
+		self.start_timer = time.time()
 
 		self.motor_driver = Adafruit_MotorHAT(i2c_bus=1)
 
@@ -42,17 +43,16 @@ class Jetbot_Control:
 		prev_x = self.pose_x
 		prev_y = self.pose_y
 
-		start = time.time()
 		timer = time.time()
 		velocity = 0
 		#rate = rospy.Rate(15)
 
 		if self.start_odom:
-			if(start - timer) > 0.0666:
-				start = time.time()
+			if(self.start_timer - timer) > 0.0666:
+				self.start_timer = time.time()
 				distance_travelled = (sqrt(pow((self.pose_x - prev_x),2) + pow((self.pose_y - prev_y),2)))*100
-				velocity = distance_travelled/(abs(start-timer))
-				if velocity < 5:
+				velocity = distance_travelled/(abs(self.start_timer - timer))
+				if velocity < 2:
 					velocity =  0.0
 
 				prev_x = self.pose_x
