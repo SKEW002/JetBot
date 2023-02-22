@@ -22,12 +22,14 @@ class Jetbot_Control:
 		self.motor_left = self.motor_driver.getMotor(self.motor_left_ID)
 		self.motor_right = self.motor_driver.getMotor(self.motor_right_ID)
 
+		self.linear_p = 0.18
+
 		self.all_stop()
 
 		
 	def velocity_callback(self, msg):
 		self.velocity = msg.data
-		print(self.velocity)
+		#print(self.velocity)
 		
 
 
@@ -77,13 +79,21 @@ class Jetbot_Control:
 	# raw L/R motor commands (speed, speed)
 	def on_cmd_raw(self, msg):
 
-		linear_x = msg.linear.x 
+		linear_x = msg.linear.x
+
+		velocity_cmd = linear_x * 100
+
+		if velocity_cmd > 10 and self.velocity < 0.001:
+			self.linear_p += 0.01
+		else:
+			self.linear_p = 0.18
+
 		angular_z = msg.angular.z #left +ve, right -ve
 		speed = [0,0]
 
 		if abs(linear_x) > 0:
-			speed[0] = 0.18/linear_x * abs(linear_x) + linear_x
-			speed[1] = 0.18/linear_x * abs(linear_x) + linear_x
+			speed[0] = self.linear_p/linear_x * abs(linear_x) + linear_x
+			speed[1] = self.linear_p/linear_x * abs(linear_x) + linear_x
 
 			#speed[0] = linear_x
 			#speed[1] = linear_x
@@ -158,4 +168,3 @@ if __name__ == '__main__':
 
 	# stop motors before exiting
 	controller.all_stop()
-
