@@ -18,7 +18,7 @@ class Jetbot_Control:
 
 		self.motor_left_ID = 1
 		self.motor_right_ID = 2
-		self.veocity = 0
+		self.velocity = 0
 		self.motor_left = self.motor_driver.getMotor(self.motor_left_ID)
 		self.motor_right = self.motor_driver.getMotor(self.motor_right_ID)
 
@@ -26,7 +26,7 @@ class Jetbot_Control:
 
 		
 	def velocity_callback(self, msg):
-		self.veocity = msg.data
+		self.velocity = msg.data
 		print(self.velocity)
 		
 
