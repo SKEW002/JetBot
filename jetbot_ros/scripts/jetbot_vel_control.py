@@ -32,7 +32,7 @@ class Jetbot_Control:
 		self.all_stop()
 
 		
-    def odomCallback(self, odom):
+	def odomCallback(self, odom):
 		self.pose_x = odom.pose.pose.position.x
 		self.pose_y = odom.pose.pose.position.y
 		self.start_odom = True
