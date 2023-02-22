@@ -3,7 +3,7 @@ import rospy
 import time
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
-from std_msgs.msg import String
+from std_msgs.msg import String, Float32
 from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Twist
 
