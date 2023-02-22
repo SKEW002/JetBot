@@ -44,6 +44,7 @@ class Jetbot_Control:
 
 		start = time.time()
 		timer = time.time()
+		velocity = 0
 		#rate = rospy.Rate(15)
 
 		if self.start_odom:
